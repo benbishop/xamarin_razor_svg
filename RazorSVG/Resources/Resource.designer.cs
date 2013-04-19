@@ -66,6 +66,9 @@ namespace RazorSVG
 			// aapt resource value: 0x7f050003
 			public const int currentValueSeekBar = 2131034115;
 			
+			// aapt resource value: 0x7f050006
+			public const int startStopButton = 2131034118;
+			
 			// aapt resource value: 0x7f050001
 			public const int svgWebView = 2131034113;
 			

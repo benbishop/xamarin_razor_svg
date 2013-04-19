@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.Views;
 using Android.Widget;
 using Android.OS;
+using System.Timers;
 
 namespace RazorSVG
 {
@@ -18,6 +19,10 @@ namespace RazorSVG
 
 		protected TextView CurrentValueLabel, UpdateSpeedLabel;
 
+		protected Button StartStopButton;
+
+		protected Timer UpdateTimer;
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -29,10 +34,17 @@ namespace RazorSVG
 			InitLabelReferences ();
 			InitCurrentValueSeekBar ();
 			InitUpdateSpeedSeekBar ();
+			InitStartStopButton();
 
 			//initial updating of labels
 			UpdateSpeedLabelText();
 			UpdateCurrentValueLabelText();
+
+			//Initializing update timer
+			InitUpdateTimer();
+
+
+			UpdateStartStopButtonLabel();
 
 		}
 
@@ -59,6 +71,31 @@ namespace RazorSVG
 			CurrentValueSeekBar.ProgressChanged += HandleCurrentValueChanged;
 		}
 
+		protected void InitUpdateTimer ()
+		{
+			UpdateTimer = new Timer ();
+			UpdateTimer.Elapsed += HandleTimerUpdateElapsed;
+			UpdateTimerInterval ();
+		}
+
+		protected void InitStartStopButton ()
+		{
+			StartStopButton = FindViewById<Button> (Resource.Id.startStopButton);
+			StartStopButton.Click += HandleStartStopClick;
+		
+		}
+
+		void HandleStartStopClick (object sender, EventArgs e)
+		{
+			if(UpdateTimer.Enabled == true){
+				UpdateTimer.Stop();
+
+			}else{
+				UpdateTimer.Start();
+			}
+			UpdateStartStopButtonLabel();
+		}
+
 		protected void UpdateCurrentValueLabelText ()
 		{
 			CurrentValueLabel.Text = String.Format("Current Value ({0})", CurrentValueSeekBar.Progress.ToString());
@@ -69,13 +106,35 @@ namespace RazorSVG
 			UpdateSpeedLabel.Text = String.Format("Update Speed ({0})", UpdateSpeedSeekBar.Progress.ToString());
 		}
 
+		protected void UpdateTimerInterval ()
+		{
+
+			var timesPerSecond = UpdateSpeedSeekBar.Progress;
+			UpdateTimer.Interval = 1000 / timesPerSecond;
+
+		}
+
+		protected void UpdateStartStopButtonLabel ()
+		{
+			StartStopButton.Text = (UpdateTimer.Enabled == true)?"Stop":"Start";
+		}
+
 		protected void HandleCurrentValueChanged (object sender, SeekBar.ProgressChangedEventArgs e)
 		{
 			UpdateCurrentValueLabelText();
 		}
 		protected void HandleUpdateSpeedChanged (object sender, SeekBar.ProgressChangedEventArgs e)
 		{
+			if(UpdateSpeedSeekBar.Progress == 0){
+				UpdateSpeedSeekBar.Progress = 1;
+			}
+			UpdateTimerInterval();
 			UpdateSpeedLabelText();
+
+		}
+		protected void HandleTimerUpdateElapsed (object sender, ElapsedEventArgs e)
+		{
+			Console.WriteLine("Tick");
 		}
 	}
 }
