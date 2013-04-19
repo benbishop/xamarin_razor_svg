@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<manifest 	xmlns:android="http://schemas.android.com/apk/res/android" 
+			android:versionCode="1" 
+			android:versionName="1.0" 
+			package="RazorSVG.RazorSVG">
+	<uses-sdk />
+	<application 	android:label="Razor SVG"
+					android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen">
+	</application>
+	<uses-permission android:name="android.permission.INTERNET" />
+</manifest>
