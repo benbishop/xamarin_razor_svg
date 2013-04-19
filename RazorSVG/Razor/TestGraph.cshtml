@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Testing SVG</title>
+
+</head>
+<body>
+
+<svg id="svgElement" xmlns="http://www.w3.org/2000/svg" version="1.1">
+    <path id="pathElement" d="" />
+</svg>
+
+
+<script language="javascript">
+
+    function updatePathData(data){
+        document.getElementById("pathElement").setAttribute("d", data)
+    }
+</script>
+</body>
+</html>

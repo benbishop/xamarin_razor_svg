@@ -7,6 +7,7 @@ using Android.Views;
 using Android.Widget;
 using Android.OS;
 using System.Timers;
+using Android.Webkit;
 
 namespace RazorSVG
 {
@@ -23,6 +24,8 @@ namespace RazorSVG
 
 		protected Timer UpdateTimer;
 
+		protected WebView GraphWebview;
+
 		protected override void OnCreate (Bundle bundle)
 		{
 			base.OnCreate (bundle);
@@ -32,6 +35,7 @@ namespace RazorSVG
 
 			//initalizing UI
 			InitLabelReferences ();
+			InitWebViewReference();
 			InitCurrentValueSeekBar ();
 			InitUpdateSpeedSeekBar ();
 			InitStartStopButton();
@@ -46,12 +50,24 @@ namespace RazorSVG
 
 			UpdateStartStopButtonLabel();
 
+			var template = new TestGraph();
+			var str = template.GenerateString ();
+			GraphWebview.Settings.JavaScriptEnabled = true;
+
+			GraphWebview.LoadData (str, "text/html", null);
+
+
 		}
 
 		protected void InitLabelReferences ()
 		{
 			CurrentValueLabel = FindViewById<TextView> (Resource.Id.currentValueLabel);
 			UpdateSpeedLabel = FindViewById<TextView> (Resource.Id.updateSpeedLabel);
+		}
+
+		void InitWebViewReference ()
+		{
+			GraphWebview = FindViewById<WebView> (Resource.Id.svgWebView);
 		}
 
 		protected void InitUpdateSpeedSeekBar ()
@@ -87,11 +103,11 @@ namespace RazorSVG
 
 		void HandleStartStopClick (object sender, EventArgs e)
 		{
-			if(UpdateTimer.Enabled == true){
-				UpdateTimer.Stop();
+			if (UpdateTimer.Enabled) {
+				UpdateTimer.Stop ();
 
-			}else{
-				UpdateTimer.Start();
+			} else {
+				UpdateTimer.Start ();
 			}
 			UpdateStartStopButtonLabel();
 		}
@@ -116,7 +132,7 @@ namespace RazorSVG
 
 		protected void UpdateStartStopButtonLabel ()
 		{
-			StartStopButton.Text = (UpdateTimer.Enabled == true)?"Stop":"Start";
+			StartStopButton.Text = (UpdateTimer.Enabled) ?"Stop":"Start";
 		}
 
 		protected void HandleCurrentValueChanged (object sender, SeekBar.ProgressChangedEventArgs e)
@@ -134,7 +150,28 @@ namespace RazorSVG
 		}
 		protected void HandleTimerUpdateElapsed (object sender, ElapsedEventArgs e)
 		{
-			Console.WriteLine("Tick");
+			RunOnUiThread(UpdateWebView);
+		}
+
+		protected int Offset = 0; 
+		protected int OffsetDelta = 5;
+		protected void UpdateWebView()
+		{
+
+			if(Offset > 200){
+				OffsetDelta = -5;
+			}
+			if(Offset < 0){
+				OffsetDelta = 5;
+			}
+			Offset += OffsetDelta;
+			Console.WriteLine("Offset: " + Offset  + " | " + OffsetDelta);
+
+			var x1 = 150 + Offset;
+			var x2 = 75 + Offset;
+			var x3 = 225 + Offset;
+
+			GraphWebview.LoadUrl("javascript:updatePathData('M"+x1+" 0 L"+x2+" 200 L"+x3+" 200 Z')");
 		}
 	}
 }
