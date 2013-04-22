@@ -12,7 +12,8 @@ using System.Collections.Generic;
 
 namespace RazorSVG
 {
-	[Activity (Label = "RazorSVG", MainLauncher = true)]
+
+	[Activity (Label = "RazorSVG", MainLauncher = true, ScreenOrientation=Android.Content.PM.ScreenOrientation.Portrait)]
 	public class Activity1 : Activity
 	{
 		int count = 1;
@@ -100,7 +101,7 @@ namespace RazorSVG
 		{
 			CurrentValueSeekBar2 = FindViewById<SeekBar> (Resource.Id.currentValueSeekBar2);
 			CurrentValueSeekBar2.Max = 400;
-			CurrentValueSeekBar2.Progress = 50;
+			CurrentValueSeekBar2.Progress = 25;
 			CurrentValueSeekBar2.ProgressChanged += HandleCurrentValue2Changed;
 		}
 
