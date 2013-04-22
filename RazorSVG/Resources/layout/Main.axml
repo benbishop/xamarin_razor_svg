@@ -19,18 +19,31 @@
         android:id="@+id/svgWebView"
         android:layout_gravity="center" />
     <TextView
-        android:text="Current Value"
+        android:text="Graph 1"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/currentValueLabel"
+        android:id="@+id/currentValueLabel1"
         android:gravity="center_horizontal"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="10dp" />
     <SeekBar
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/currentValueSeekBar" />
+        android:id="@+id/currentValueSeekBar1" />
+    <TextView
+        android:text="Graph 2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/currentValueLabel2"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp" />
+    <SeekBar
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/currentValueSeekBar2" />
     <TextView
         android:text="Update Speed"
         android:textAppearance="?android:attr/textAppearanceSmall"

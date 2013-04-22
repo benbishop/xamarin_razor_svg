@@ -7,14 +7,20 @@
 <body>
 
 <svg id="svgElement" xmlns="http://www.w3.org/2000/svg" version="1.1">
-    <path id="pathElement" d="" />
+    <path 	id="pathElement1" d=""
+    		style="fill:lime;stroke:purple;stroke-width:1" />
+    <path 	id="pathElement2" d=""
+    		style="fill:red;stroke:purple;stroke-width:1" />
 </svg>
 
 
 <script language="javascript">
 
-    function updatePathData(data){
-        document.getElementById("pathElement").setAttribute("d", data)
+    function updatePathData1(data){
+        document.getElementById("pathElement1").setAttribute("d", data)
+    }
+    function updatePathData2(data){
+        document.getElementById("pathElement2").setAttribute("d", data)
     }
 </script>
 </body>

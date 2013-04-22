@@ -8,6 +8,7 @@ using Android.Widget;
 using Android.OS;
 using System.Timers;
 using Android.Webkit;
+using System.Collections.Generic;
 
 namespace RazorSVG
 {
@@ -16,15 +17,17 @@ namespace RazorSVG
 	{
 		int count = 1;
 
-		protected SeekBar CurrentValueSeekBar, UpdateSpeedSeekBar;
+		protected SeekBar CurrentValueSeekBar1, UpdateSpeedSeekBar, CurrentValueSeekBar2;
 
-		protected TextView CurrentValueLabel, UpdateSpeedLabel;
+		protected TextView CurrentValueLabel1, UpdateSpeedLabel, CurrentValueLabel2;
 
 		protected Button StartStopButton;
 
 		protected Timer UpdateTimer;
 
 		protected WebView GraphWebview;
+
+		protected List<int> GraphValues1, GraphValues2;
 
 		protected override void OnCreate (Bundle bundle)
 		{
@@ -36,13 +39,14 @@ namespace RazorSVG
 			//initalizing UI
 			InitLabelReferences ();
 			InitWebViewReference();
-			InitCurrentValueSeekBar ();
+			InitCurrentValueSeekBar1 ();
+			InitCurrentValueSeekBar2 ();
 			InitUpdateSpeedSeekBar ();
 			InitStartStopButton();
 
 			//initial updating of labels
 			UpdateSpeedLabelText();
-			UpdateCurrentValueLabelText();
+			UpdateCurrentValue1LabelText();
 
 			//Initializing update timer
 			InitUpdateTimer();
@@ -56,12 +60,16 @@ namespace RazorSVG
 
 			GraphWebview.LoadData (str, "text/html", null);
 
+			GraphValues1 = new List<int>();
+			GraphValues2 = new List<int>();
+
 
 		}
 
 		protected void InitLabelReferences ()
 		{
-			CurrentValueLabel = FindViewById<TextView> (Resource.Id.currentValueLabel);
+			CurrentValueLabel1 = FindViewById<TextView> (Resource.Id.currentValueLabel1);
+			CurrentValueLabel2 = FindViewById<TextView> (Resource.Id.currentValueLabel2);
 			UpdateSpeedLabel = FindViewById<TextView> (Resource.Id.updateSpeedLabel);
 		}
 
@@ -79,12 +87,21 @@ namespace RazorSVG
 		}
 
 
-		protected void InitCurrentValueSeekBar ()
+		protected void InitCurrentValueSeekBar1 ()
 		{
-			CurrentValueSeekBar = FindViewById<SeekBar> (Resource.Id.currentValueSeekBar);
-			CurrentValueSeekBar.Max = 100;
-			CurrentValueSeekBar.Progress = 50;
-			CurrentValueSeekBar.ProgressChanged += HandleCurrentValueChanged;
+			CurrentValueSeekBar1 = FindViewById<SeekBar> (Resource.Id.currentValueSeekBar1);
+			CurrentValueSeekBar1.Max = 400;
+			CurrentValueSeekBar1.Progress = 50;
+			CurrentValueSeekBar1.ProgressChanged += HandleCurrentValue1Changed;
+		}
+
+
+		protected void InitCurrentValueSeekBar2 ()
+		{
+			CurrentValueSeekBar2 = FindViewById<SeekBar> (Resource.Id.currentValueSeekBar2);
+			CurrentValueSeekBar2.Max = 400;
+			CurrentValueSeekBar2.Progress = 50;
+			CurrentValueSeekBar2.ProgressChanged += HandleCurrentValue2Changed;
 		}
 
 		protected void InitUpdateTimer ()
@@ -112,9 +129,14 @@ namespace RazorSVG
 			UpdateStartStopButtonLabel();
 		}
 
-		protected void UpdateCurrentValueLabelText ()
+		protected void UpdateCurrentValue1LabelText ()
 		{
-			CurrentValueLabel.Text = String.Format("Current Value ({0})", CurrentValueSeekBar.Progress.ToString());
+			CurrentValueLabel1.Text = String.Format("Current Value ({0})", CurrentValueSeekBar1.Progress.ToString());
+		}
+
+		protected void UpdateCurrentValue2LabelText ()
+		{
+			CurrentValueLabel2.Text = String.Format("Current Value ({0})", CurrentValueSeekBar2.Progress.ToString());
 		}
 
 		protected void UpdateSpeedLabelText ()
@@ -135,9 +157,13 @@ namespace RazorSVG
 			StartStopButton.Text = (UpdateTimer.Enabled) ?"Stop":"Start";
 		}
 
-		protected void HandleCurrentValueChanged (object sender, SeekBar.ProgressChangedEventArgs e)
+		protected void HandleCurrentValue1Changed (object sender, SeekBar.ProgressChangedEventArgs e)
 		{
-			UpdateCurrentValueLabelText();
+			UpdateCurrentValue1LabelText();
+		}
+		protected void HandleCurrentValue2Changed (object sender, SeekBar.ProgressChangedEventArgs e)
+		{
+			UpdateCurrentValue2LabelText();
 		}
 		protected void HandleUpdateSpeedChanged (object sender, SeekBar.ProgressChangedEventArgs e)
 		{
@@ -150,28 +176,33 @@ namespace RazorSVG
 		}
 		protected void HandleTimerUpdateElapsed (object sender, ElapsedEventArgs e)
 		{
+			GraphValues1.Add(CurrentValueSeekBar1.Progress);
+			GraphValues2.Add(CurrentValueSeekBar2.Progress);
 			RunOnUiThread(UpdateWebView);
 		}
 
-		protected int Offset = 0; 
-		protected int OffsetDelta = 5;
+
 		protected void UpdateWebView()
 		{
+			GraphWebview.LoadUrl("javascript:updatePathData1('"+ ConvertListToPathData(GraphValues1) + "')");
+			GraphWebview.LoadUrl("javascript:updatePathData2('"+ ConvertListToPathData(GraphValues2) + "')");
+		}
 
-			if(Offset > 200){
-				OffsetDelta = -5;
+		protected string ConvertListToPathData(List<int> values)
+		{
+			if(values.Count > 250){
+				values.RemoveRange(0, values.Count - 250);
 			}
-			if(Offset < 0){
-				OffsetDelta = 5;
+			string pathDataStr = "M";
+			for(int i = 0; i < values.Count; i++){
+				pathDataStr += String.Format("{0} {1} ", i.ToString(), values[i].ToString());
 			}
-			Offset += OffsetDelta;
-			Console.WriteLine("Offset: " + Offset  + " | " + OffsetDelta);
-
-			var x1 = 150 + Offset;
-			var x2 = 75 + Offset;
-			var x3 = 225 + Offset;
-
-			GraphWebview.LoadUrl("javascript:updatePathData('M"+x1+" 0 L"+x2+" 200 L"+x3+" 200 Z')");
+			var furthestX = (values.Count - 1).ToString ();
+			pathDataStr += String.Format ("{0} 400 ", furthestX);
+			pathDataStr += "0 400 ";
+			pathDataStr += String.Format("0 {0} ", values[0].ToString());
+			pathDataStr += "Z";
+			return pathDataStr;
 		}
 	}
 }

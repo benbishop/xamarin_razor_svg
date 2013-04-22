@@ -35,16 +35,35 @@ WriteLiteral(" version=\"1.1\"");
 
 WriteLiteral(">\n    <path");
 
-WriteLiteral(" id=\"pathElement\"");
+WriteLiteral(" \tid=\"pathElement1\"");
 
 WriteLiteral(" d=\"\"");
+
+WriteLiteral("\n    \t\tstyle=\"fill:lime;stroke:purple;stroke-width:1\"");
+
+WriteLiteral(" />\n    <path");
+
+WriteLiteral(" \tid=\"pathElement2\"");
+
+WriteLiteral(" d=\"\"");
+
+WriteLiteral("\n    \t\tstyle=\"fill:red;stroke:purple;stroke-width:1\"");
 
 WriteLiteral(" />\n</svg>\n\n\n<script");
 
 WriteLiteral(" language=\"javascript\"");
 
-WriteLiteral(">\n\n    function updatePathData(data){\n        document.getElementById(\"pathElemen" +
-"t\").setAttribute(\"d\", data)\n    }\n</script>\n</body>\n</html>");
+WriteLiteral(@">
+
+    function updatePathData1(data){
+        document.getElementById(""pathElement1"").setAttribute(""d"", data)
+    }
+    function updatePathData2(data){
+        document.getElementById(""pathElement2"").setAttribute(""d"", data)
+    }
+</script>
+</body>
+</html>");
 
 }
 }
