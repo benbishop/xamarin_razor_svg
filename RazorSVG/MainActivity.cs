@@ -101,7 +101,7 @@ namespace RazorSVG
 		{
 			CurrentValueSeekBar2 = FindViewById<SeekBar> (Resource.Id.currentValueSeekBar2);
 			CurrentValueSeekBar2.Max = 400;
-			CurrentValueSeekBar2.Progress = 25;
+			CurrentValueSeekBar2.Progress = 200;
 			CurrentValueSeekBar2.ProgressChanged += HandleCurrentValue2Changed;
 		}
 
@@ -175,18 +175,25 @@ namespace RazorSVG
 			UpdateSpeedLabelText();
 
 		}
+
+		protected string Path1DataString;
+		protected string Path2DataString;
+
+
 		protected void HandleTimerUpdateElapsed (object sender, ElapsedEventArgs e)
 		{
 			GraphValues1.Add(CurrentValueSeekBar1.Progress);
 			GraphValues2.Add(CurrentValueSeekBar2.Progress);
+			Path1DataString = ConvertListToPathData(GraphValues1);
+			Path2DataString = ConvertListToPathData(GraphValues2);
 			RunOnUiThread(UpdateWebView);
 		}
 
 
 		protected void UpdateWebView()
 		{
-			GraphWebview.LoadUrl("javascript:updatePathData1('"+ ConvertListToPathData(GraphValues1) + "')");
-			GraphWebview.LoadUrl("javascript:updatePathData2('"+ ConvertListToPathData(GraphValues2) + "')");
+			GraphWebview.LoadUrl("javascript:updatePathData1('"+ Path1DataString + "')");
+			GraphWebview.LoadUrl("javascript:updatePathData2('"+ Path2DataString + "')");
 		}
 
 		protected string ConvertListToPathData(List<int> values)
@@ -195,6 +202,7 @@ namespace RazorSVG
 				values.RemoveRange(0, values.Count - 250);
 			}
 			string pathDataStr = "M";
+
 			for(int i = 0; i < values.Count; i++){
 				pathDataStr += String.Format("{0} {1} ", i.ToString(), values[i].ToString());
 			}
