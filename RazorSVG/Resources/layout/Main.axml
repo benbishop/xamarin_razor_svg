@@ -18,51 +18,63 @@
         android:layout_height="400dp"
         android:id="@+id/svgWebView"
         android:layout_gravity="center" />
-    <TextView
-        android:text="Graph 1"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+    <ScrollView
+        android:minWidth="25px"
+        android:minHeight="25px"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/currentValueLabel1"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
-    <SeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/currentValueSeekBar1" />
-    <TextView
-        android:text="Graph 2"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/currentValueLabel2"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
-    <SeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/currentValueSeekBar2" />
-    <TextView
-        android:text="Update Speed"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/updateSpeedLabel"
-        android:gravity="center"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp" />
-    <SeekBar
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/updateSpeedSeekBar" />
-    <Button
-        android:text="Button"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/startStopButton"
-        android:layout_marginLeft="30dp"
-        android:layout_marginRight="30dp"
-        android:layout_marginTop="10dp" />
+        android:layout_height="fill_parent"
+        android:id="@+id/scrollView1">
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent">
+            <TextView
+                android:text="Graph 1"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentValueLabel1"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentValueSeekBar1" />
+            <TextView
+                android:text="Graph 2"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentValueLabel2"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/currentValueSeekBar2" />
+            <TextView
+                android:text="Update Speed"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/updateSpeedLabel"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp" />
+            <SeekBar
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/updateSpeedSeekBar" />
+            <Button
+                android:text="Button"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/startStopButton"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:layout_marginTop="10dp" />
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>
